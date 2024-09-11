@@ -1,0 +1,34 @@
+# @package _global_
+
+# specify here default training configuration
+defaults:
+  - _self_
+  - trainer: gpu.yaml
+  - model: adversarial_distortion_gan3.yaml
+  - paths: default.yaml
+  - datamodule: host_msg_datamodule.yaml
+  - logger: tensorboard.yaml
+
+  - mode: test.yaml
+
+  # optional local config
+  - optional local: default.yaml
+
+# test ckpt path
+ckpt_path: null
+
+# path to folder with data
+img_shape: [3, 128, 128]
+img_size: [128, 128]
+msg_len: 30
+
+# pretty print config at the start of the run using Rich library
+print_config: True
+
+# disable python warnings if they annoy you
+ignore_warnings: True
+
+# seed for random number generators in pytorch, numpy and python.random
+seed: 42    # Forty-two is the answer to everything.
+
+tags: ["dev"]

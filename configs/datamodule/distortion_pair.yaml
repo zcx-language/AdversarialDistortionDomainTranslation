@@ -1,0 +1,15 @@
+_target_: datamodules.datamodule.DataModule
+
+dataset:
+  _target_: datamodules.distortion_pair.DistortionPair
+  _partial_: true
+  data_root: ${paths.data_dir}/ImageTranslationPair/
+  distortion_dir: jpeg/qf=50
+  img_shape: [3, 128, 128]
+  train_valid_test_nums: [1000, 10, 10]
+  target2diff: false
+
+dataloader_cfg:
+  batch_size: 32
+  num_workers: 4
+  pin_memory: true

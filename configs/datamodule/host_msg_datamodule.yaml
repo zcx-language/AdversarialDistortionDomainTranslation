@@ -1,0 +1,23 @@
+_target_: datamodules.host_msg_datamodule.HostMsgDataModule
+train_data:
+  _target_: datamodules.host_msg_datamodule.HostMsgData
+  host_dir: ${paths.data_dir}/mirflickr
+  image_shape: ${img_shape}
+  secret_len: ${msg_len}
+
+valid_data:
+  _target_: datamodules.host_msg_datamodule.HostMsgData
+  host_dir: ${paths.data_dir}/ImageNet_CoCo/original_aspect/
+  image_shape: ${img_shape}
+  secret_len: ${msg_len}
+
+test_data:
+  _target_: datamodules.host_msg_datamodule.HostMsgData
+  host_dir: ${paths.data_dir}/ImageNet_CoCo/original_aspect/
+  image_shape: ${img_shape}
+  secret_len: ${msg_len}
+
+dataloader_cfg:
+  batch_size: 64
+  num_workers: 4
+  pin_memory: true

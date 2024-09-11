@@ -1,0 +1,15 @@
+model_checkpoint:
+  _target_: pytorch_lightning.callbacks.ModelCheckpoint
+  dirpath: ${paths.output_dir}/checkpoints
+  monitor: "tbit_acc" # order model by bit accuracy under distortions
+  mode: "max" # "max" means higher metric value is better, can be also "min"
+  save_top_k: 3 # save k best models (determined by above metric)
+  save_last: True # additionally always save model from last epoch
+  filename: "{epoch:03d}-{psnr:.3f}-{tbit_acc:.3f}"
+
+model_summary:
+  _target_: pytorch_lightning.callbacks.ModelSummary
+  max_depth: 5
+
+progress_bar:
+  _target_: pytorch_lightning.callbacks.TQDMProgressBar

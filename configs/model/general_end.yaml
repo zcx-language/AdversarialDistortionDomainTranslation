@@ -1,0 +1,90 @@
+_target_: models.general_end.GeneralEND
+
+encoder:
+  _target_: models.encoder.StegaStampEncoder
+  image_shape: ${img_shape}
+  secret_len: ${msg_len}
+
+noise_layer:
+  _target_: models.noiser.NoiseLayer
+  forward_asl: False
+  device: cuda
+  distortions:
+    Identity:
+      _target_: torch.nn.Identity
+    # GaussianNoise:
+    #   _target_: kornia.augmentation.RandomGaussianNoise
+    #   mean: 0.
+    #   std: 0.05
+    # GaussianBlur:
+    #   _target_: kornia.augmentation.RandomGaussianBlur
+    #   kernel_size: [5, 5]
+    #   sigma: [0.1, 2.0]
+
+    # Jpeg:
+    #   _target_: models.noiser.jpeg_simulator.Jpeg
+    #  Q: 50
+    # JpegMask:
+    #   _target_: models.noiser.jpeg_simulator.JpegMask
+    JpegSS:
+      _target_: models.noiser.jpeg_simulator.JpegSS
+      Q: 50
+    # JpegGAN:
+    #   _target_: models.distortion_simulation.DistortionSimulation
+    #   image_shape: ${img_shape}
+    #   ckpt_path: ${paths.log_dir}/ckpts/2023-10-15/14-08-29/checkpoints/epoch=009.ckpt
+
+decoder:
+  _target_: models.decoder.StegaStampDecoder
+  image_shape: ${model.encoder.image_shape}
+  secret_len: ${model.encoder.secret_len}
+
+test_distortions:
+  GaussianNoise:
+    _target_: kornia.augmentation.RandomGaussianNoise
+    mean: 0.
+    std: 0.05
+  GaussianBlur:
+    _target_: kornia.augmentation.RandomGaussianBlur
+    kernel_size: [5, 5]
+    sigma: [0.1, 2.0]
+
+  JPEG10:
+    _target_: models.noiser.lossy_compression.JPEGCompression
+    quality_factor: 10
+  JPEG20:
+    _target_: models.noiser.lossy_compression.JPEGCompression
+    quality_factor: 20
+  JPEG30:
+    _target_: models.noiser.lossy_compression.JPEGCompression
+    quality_factor: 30
+  JPEG40:
+    _target_: models.noiser.lossy_compression.JPEGCompression
+    quality_factor: 40
+  JPEG50:
+    _target_: models.noiser.lossy_compression.JPEGCompression
+    quality_factor: 50
+  JPEG60:
+    _target_: models.noiser.lossy_compression.JPEGCompression
+    quality_factor: 60
+  JPEG70:
+    _target_: models.noiser.lossy_compression.JPEGCompression
+    quality_factor: 70
+  JPEG80:
+    _target_: models.noiser.lossy_compression.JPEGCompression
+    quality_factor: 80
+  JPEG90:
+    _target_: models.noiser.lossy_compression.JPEGCompression
+    quality_factor: 90
+
+loss_cfg:
+  dis_weight: 0.
+  lpips_weight: 1.
+  pix_weight: 1.
+  msg_weight: 30.
+
+train_cfg:
+  # base_psnr: 35
+  lr: 0.0001
+
+

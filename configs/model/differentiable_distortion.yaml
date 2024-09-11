@@ -1,0 +1,19 @@
+_target_: models.DifferentiableDistortion
+img_shape: ${img_shape}
+msg_len: ${msg_len}
+# distortion_types: [jpeg, jpeg2000, webp]
+# distortion_types: [rainy, emboss, fisheye]
+# distortion_types: [jpeg, jpeg2000, webp, rainy, emboss, fisheye]
+distortion_types: [jpeg, gaussian_blur, gaussian_noise, resize, dropout, cropout]
+# distortion_types: [identity]
+enable_gan: True
+forward_asl: False
+
+loss_cfg:
+  wgan:
+    generator:
+      vis_loss_scale: 1.5
+      msg_loss_scale: 1.
+      gan_loss_scale: 1.
+
+lr: 0.0001

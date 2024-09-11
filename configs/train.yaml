@@ -1,0 +1,47 @@
+# @package _global_
+
+# specify here default training configuration
+defaults:
+  - _self_
+  - trainer: gpu.yaml
+  - model: adversarial_distortion_gans3.yaml
+  - paths: default.yaml
+  - datamodule: host_msg_datamodule.yaml
+  - callbacks: for_adt.yaml
+  - logger: tensorboard.yaml
+
+  - mode: train.yaml
+
+  - experiment: null
+  - hparams_search: null
+
+  # optional local config
+  - optional local: default.yaml
+
+
+# resume from this ckpt
+resume_ckpt_path: null
+
+# path to folder with data
+img_shape: [3, 128, 128]
+img_size: [128, 128]
+msg_len: 30
+
+# pretty print config at the start of the run using Rich library
+print_config: True
+
+# disable python warnings if they annoy you
+ignore_warnings: True
+
+# evaluate on test set, using best model weights achieved during training
+# lightning chooses best weights based on metric specified in checkpoint callback
+test_after_training: True
+
+# seed for random number generators in pytorch, numpy and python.random
+seed: 42    # Forty-two is the answer to everything.
+
+# name of the run is accessed by loggers
+# should be used along with experiment mode
+task_name: train
+
+tags: ["dev"]

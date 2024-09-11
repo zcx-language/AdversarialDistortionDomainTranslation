@@ -1,0 +1,9 @@
+_target_: datamodules.mirflickr.MirflickrModule
+dataset_cfg:
+  data_dir: ${paths.data_dir}/mirflickr/
+  img_shape: ${img_shape}
+  secret_len: ${msg_len}
+batch_size: 32
+num_workers: 4
+pin_memory: True
+# drop_last: True

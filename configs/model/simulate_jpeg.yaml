@@ -1,0 +1,12 @@
+_target_: models.SimulateJPEG
+img_shape: ${img_shape}
+msg_len: ${msg_len}
+# a value in ['JPEG_Mask', 'JPEG_SS', 'JPEG_SS_Adv', 'JPEG_Mix']
+simulate_type: JPEG_Mask
+
+loss_cfg:
+    vis_loss_scale: 1.5
+    msg_loss_scale: 1.
+    gan_loss_scale: 1.
+
+lr: 0.0001

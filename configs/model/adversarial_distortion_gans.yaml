@@ -1,0 +1,372 @@
+_target_: models.adversarial_distortion_gans3.AdversarialDistortionGANs
+
+encoder:
+  _target_: models.encoder.stegastamp_encoder.StegaStampEncoder
+  image_shape: ${img_shape}
+  secret_len: ${msg_len}
+  # _target_: models.encoder.ARWGANEncoder
+  # _target_: models.encoder.PIMoGEncoder
+
+decoder:
+  _target_: models.decoder.stegastamp_decoder.StegaStampDecoder
+  image_shape: ${img_shape}
+  secret_len: ${msg_len}
+  # _target_: models.decoder.ARWGANDecoder
+  # _target_: models.decoder.PIMoGDecoder
+
+discriminator:
+  _target_: models.discriminator.stegastamp_discriminator.StegaStampDiscriminator
+  in_channels: 3
+
+distortion_gans:
+  _target_: torch.nn.ModuleDict
+  modules:
+    JpegGAN:
+      _target_: models.noiser.distortion_gan.DistortionGAN
+      in_channels: 3
+      out_channels: 3
+      loss_cfg:
+        gan_weight: 1
+        l1_weight: 3.
+        adv_weight: 0.1
+        adv_steps: 2
+    WebpGAN:
+      _target_: models.noiser.distortion_gan.DistortionGAN
+      in_channels: 3
+      out_channels: 3
+      loss_cfg:
+        gan_weight: 1
+        l1_weight: 3.
+        adv_weight: 0.1
+        adv_steps: 2
+    Jpeg2000GAN:
+      _target_: models.noiser.distortion_gan.DistortionGAN
+      in_channels: 3
+      out_channels: 3
+      loss_cfg:
+        gan_weight: 1
+        l1_weight: 3.
+        adv_weight: 0.1
+        adv_steps: 2
+    RainyGAN:
+      _target_: models.noiser.distortion_gan.DistortionGAN
+      in_channels: 3
+      out_channels: 3
+      loss_cfg:
+        gan_weight: 1
+        l1_weight: 0.5
+        adv_weight: 0.1
+        adv_steps: 2
+    EmbossGAN:
+      _target_: models.noiser.distortion_gan.DistortionGAN
+      in_channels: 3
+      out_channels: 3
+      loss_cfg:
+        gan_weight: 1
+        l1_weight: 3.
+        adv_weight: 0.1
+        adv_steps: 2
+    FisheyeGAN:
+      _target_: models.noiser.distortion_gan.DistortionGAN
+      in_channels: 3
+      out_channels: 3
+      loss_cfg:
+        gan_weight: 1
+        l1_weight: 3.
+        adv_weight: 0.
+        adv_steps: 0
+
+
+train_distortions:
+  JpegSS:
+    _target_: models.noiser.RandomJpegSS
+    quality: [50, 100]
+    ramp: 1000
+  Jpeg:
+    _target_: models.noiser.RandomJpeg
+    quality: [50, 100]
+    ramp: 1000
+  JpegMask:
+    _target_: models.noiser.RandomJpegMask
+    quality: [50, 100]
+    ramp: 1000
+  GaussianNoise:
+    _target_: models.noiser.RandomGaussianNoise
+    max_sigma: 0.05
+    ramp: 1000
+    random: True
+  SaltPepper:
+    _target_: models.noiser.RandomSaltPepper
+    prob: 0.05
+    ramp: 1000
+  GaussianBlur:
+    _target_: models.noiser.RandomGaussianBlur
+    max_kernel_size: 9
+    ramp: 1000
+    random: True
+  Colorjitter:
+    _target_: models.noiser.RandomColorJitter
+    brightness: 0.5
+    contrast: 0.5
+    saturation: 0.5
+    hue: 0.2
+    ramp: 1000
+
+  Resize:
+    _target_: models.noiser.RandomResize
+    ratio: [0.5, 2.0]
+    size: ${img_size}
+    ramp: 1000
+    random: True
+  Rotation:
+    _target_: models.noiser.RandomRotation
+    degrees: 15.
+    ramp: 1000
+  Erasing:
+    _target_: models.noiser.RandomErasing
+    scale: [0.02, 0.35]
+    ratio: [0.5, 2]
+    ramp: 1000
+
+
+test_distortions:
+  JpegOpenCV50:
+    _target_: models.noiser.lossy_compression.JpegOpenCV
+    quality_factor: 50
+  JpegOpenCV55:
+    _target_: models.noiser.lossy_compression.JpegOpenCV
+    quality_factor: 55
+  JpegOpenCV60:
+    _target_: models.noiser.lossy_compression.JpegOpenCV
+    quality_factor: 60
+  JpegOpenCV65:
+    _target_: models.noiser.lossy_compression.JpegOpenCV
+    quality_factor: 65
+  JpegOpenCV70:
+    _target_: models.noiser.lossy_compression.JpegOpenCV
+    quality_factor: 70
+  JpegOpenCV75:
+    _target_: models.noiser.lossy_compression.JpegOpenCV
+    quality_factor: 75
+  JpegOpenCV80:
+    _target_: models.noiser.lossy_compression.JpegOpenCV
+    quality_factor: 80
+  JpegOpenCV85:
+    _target_: models.noiser.lossy_compression.JpegOpenCV
+    quality_factor: 85
+  JpegOpenCV90:
+    _target_: models.noiser.lossy_compression.JpegOpenCV
+    quality_factor: 90
+  JpegOpenCV95:
+    _target_: models.noiser.lossy_compression.JpegOpenCV
+    quality_factor: 95
+  JpegOpenCV100:
+    _target_: models.noiser.lossy_compression.JpegOpenCV
+    quality_factor: 100
+  WebpOpenCV50:
+    _target_: models.noiser.lossy_compression.WebpOpenCV
+    quality_factor: 50
+  WebpOpenCV55:
+    _target_: models.noiser.lossy_compression.WebpOpenCV
+    quality_factor: 55
+  WebpOpenCV60:
+    _target_: models.noiser.lossy_compression.WebpOpenCV
+    quality_factor: 560
+  WebpOpenCV65:
+    _target_: models.noiser.lossy_compression.WebpOpenCV
+    quality_factor: 65
+  WebpOpenCV70:
+    _target_: models.noiser.lossy_compression.WebpOpenCV
+    quality_factor: 70
+  WebpOpenCV75:
+    _target_: models.noiser.lossy_compression.WebpOpenCV
+    quality_factor: 75
+  WebpOpenCV80:
+    _target_: models.noiser.lossy_compression.WebpOpenCV
+    quality_factor: 80
+  WebpOpenCV85:
+    _target_: models.noiser.lossy_compression.WebpOpenCV
+    quality_factor: 85
+  WebpOpenCV90:
+    _target_: models.noiser.lossy_compression.WebpOpenCV
+    quality_factor: 90
+  WebpOpenCV95:
+    _target_: models.noiser.lossy_compression.WebpOpenCV
+    quality_factor: 95
+  WebpOpenCV100:
+    _target_: models.noiser.lossy_compression.WebpOpenCV
+    quality_factor: 100
+  Jpeg2000OPenCV50:
+    _target_: models.noiser.lossy_compression.Jpeg2000OpenCV
+    compression_ratio: 50
+  Jpeg2000OPenCV55:
+    _target_: models.noiser.lossy_compression.Jpeg2000OpenCV
+    compression_ratio: 55
+  Jpeg2000OPenCV60:
+    _target_: models.noiser.lossy_compression.Jpeg2000OpenCV
+    compression_ratio: 60
+  Jpeg2000OPenCV65:
+    _target_: models.noiser.lossy_compression.Jpeg2000OpenCV
+    compression_ratio: 65
+  Jpeg2000OPenCV70:
+    _target_: models.noiser.lossy_compression.Jpeg2000OpenCV
+    compression_ratio: 70
+  Jpeg2000OPenCV75:
+    _target_: models.noiser.lossy_compression.Jpeg2000OpenCV
+    compression_ratio: 75
+  Jpeg2000OPenCV80:
+    _target_: models.noiser.lossy_compression.Jpeg2000OpenCV
+    compression_ratio: 80
+  Jpeg2000OPenCV85:
+    _target_: models.noiser.lossy_compression.Jpeg2000OpenCV
+    compression_ratio: 85
+  Jpeg2000OPenCV90:
+    _target_: models.noiser.lossy_compression.Jpeg2000OpenCV
+    compression_ratio: 90
+  Jpeg2000OPenCV95:
+    _target_: models.noiser.lossy_compression.Jpeg2000OpenCV
+    compression_ratio: 95
+  Jpeg2000OPenCV100:
+    _target_: models.noiser.lossy_compression.Jpeg2000OpenCV
+    compression_ratio: 100
+  GaussianNoise3:
+    _target_: models.noiser.RandomGaussianNoise
+    max_sigma: 0.03
+  GaussianNoise4:
+    _target_: models.noiser.RandomGaussianNoise
+    max_sigma: 0.04
+  GaussianNoise5:
+    _target_: models.noiser.RandomGaussianNoise
+    max_sigma: 0.05
+  GaussianNoise6:
+    _target_: models.noiser.RandomGaussianNoise
+    max_sigma: 0.06
+  GaussianNoise7:
+    _target_: models.noiser.RandomGaussianNoise
+    max_sigma: 0.07
+  GaussianNoise8:
+    _target_: models.noiser.RandomGaussianNoise
+    max_sigma: 0.08
+  GaussianNoise9:
+    _target_: models.noiser.RandomGaussianNoise
+    max_sigma: 0.09
+  GaussianNoise10:
+    _target_: models.noiser.RandomGaussianNoise
+    max_sigma: 0.10
+  SaltPepper3:
+    _target_: models.noiser.RandomSaltPepper
+    prob: 0.03
+  SaltPepper4:
+    _target_: models.noiser.RandomSaltPepper
+    prob: 0.04
+  SaltPepper5:
+    _target_: models.noiser.RandomSaltPepper
+    prob: 0.05
+  SaltPepper6:
+    _target_: models.noiser.RandomSaltPepper
+    prob: 0.06
+  SaltPepper7:
+    _target_: models.noiser.RandomSaltPepper
+    prob: 0.07
+  SaltPepper8:
+    _target_: models.noiser.RandomSaltPepper
+    prob: 0.08
+  SaltPepper9:
+    _target_: models.noiser.RandomSaltPepper
+    prob: 0.09
+  SaltPepper10:
+    _target_: models.noiser.RandomSaltPepper
+    prob: 0.10
+  GaussianBlur7:
+    _target_: models.noiser.RandomGaussianBlur
+    max_kernel_size: 7
+  GaussianBlur9:
+    _target_: models.noiser.RandomGaussianBlur
+    max_kernel_size: 9
+  GaussianBlur11:
+    _target_: models.noiser.RandomGaussianBlur
+    max_kernel_size: 11
+  GaussianBlur13:
+    _target_: models.noiser.RandomGaussianBlur
+    max_kernel_size: 13
+  GaussianBlur15:
+    _target_: models.noiser.RandomGaussianBlur
+    max_kernel_size: 15
+  Colorjitter:
+    _target_: models.noiser.RandomColorJitter
+    brightness: 0.5
+    contrast: 0.5
+    saturation: 0.5
+    hue: 0.2
+
+  Resize20:
+    _target_: models.noiser.RandomResize
+    ratio: [0.5, 2.0]
+    size: ${img_size}
+  Resize25:
+    _target_: models.noiser.RandomResize
+    ratio: [0.4, 2.5]
+    size: ${img_size}
+  Resize30:
+    _target_: models.noiser.RandomResize
+    ratio: [0.33, 3.0]
+    size: ${img_size}
+  Resize35:
+    _target_: models.noiser.RandomResize
+    ratio: [0.28, 3.5]
+    size: ${img_size}
+  Resize40:
+    _target_: models.noiser.RandomResize
+    ratio: [0.25, 4.0]
+    size: ${img_size}
+  Rotation:
+    _target_: models.noiser.RandomRotation
+    degrees: 15.
+  Erasing30:
+    _target_: models.noiser.RandomErasing
+    scale: [0.25, 0.3]
+    ratio: [0.5, 2]
+  Erasing35:
+    _target_: models.noiser.RandomErasing
+    scale: [0.3, 0.35]
+    ratio: [0.5, 2]
+  Erasing40:
+    _target_: models.noiser.RandomErasing
+    scale: [0.35, 0.40]
+    ratio: [0.5, 2]
+  Erasing45:
+    _target_: models.noiser.RandomErasing
+    scale: [0.4, 0.45]
+    ratio: [0.5, 2]
+  Erasing50:
+    _target_: models.noiser.RandomErasing
+    scale: [0.45, 0.50]
+    ratio: [0.5, 2]
+
+  Rainy:
+    _target_: models.noiser.ps_effects.RainyEffect
+  Emboss:
+    _target_: models.noiser.ps_effects.EmbossEffect
+  Fisheye:
+    _target_: models.noiser.ps_effects.FisheyeEffect
+
+
+train_cfg:
+  train_distortion_gans: true
+  target_psnr: 36
+  simulate_type: combine
+  lr: 0.0001
+
+loss_cfg:
+  adgan:
+    # Obsoleted this uniform config, each distortion GAN has its own config.
+    gan_weight: 1.
+    l1_weight: 3.
+    adv_weight: 0.
+    adv_steps: 3
+
+  wgan:
+    gan_weight: 0.
+    lpips_weight: 3.
+    pix_weight: 1.
+    msg_weight: 5.

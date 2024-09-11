@@ -1,0 +1,24 @@
+# @package _global_
+
+# specify here default training configuration
+defaults:
+  - _self_
+  - model: adversarial_distortion_gans2.yaml
+  - paths: default.yaml
+
+  - mode: test.yaml
+
+  # optional local config
+  - optional local: default.yaml
+
+# test ckpt path
+ckpt_path: /home/chengxin/Project/AdversarialDistortionTranslation/logs/ckpts/2023-11-16_22-34-05_wechat_0.01/checkpoints/epoch=057-tbit_acc=0.924.ckpt
+# path to folder with data
+img_shape: [3, 128, 128]
+msg_len: 30
+
+# disable python warnings if they annoy you
+ignore_warnings: True
+
+# seed for random number generators in pytorch, numpy and python.random
+seed: 42    # Forty-two is the answer to everything.

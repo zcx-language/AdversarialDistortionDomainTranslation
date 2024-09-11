@@ -1,0 +1,20 @@
+_target_: models.AdversarialSimulateJPEG
+img_shape: ${img_shape}
+msg_len: ${msg_len}
+simulate_type: advgan
+enable_gan: True
+
+loss_cfg:
+  jpeg_gan:
+    generator:
+      gan_loss_scale: 1.
+      content_loss_scale: 1.
+      adv_loss_scale: 0.1
+  encoder_decoder:
+    l1_loss_scale: 1.
+    g_loss_scale: 1.
+    lpips_loss_scale: 1.
+    msg_loss_scale: 1.
+    tmsg_loss_scale: 1.
+
+lr: 0.0001

@@ -1,0 +1,11 @@
+_target_: models.distortion_simulation.DistortionSimulation
+
+loss_cfg:
+  gan_weight: 1.
+  pix_weight: 10.
+
+train_cfg:
+  use_dropout: false
+  target2diff: ${datamodule.dataset.target2diff}
+  gan_type: lsgan       # Union[wgan-gp|lsgan|hinge]
+  lr: 0.0001

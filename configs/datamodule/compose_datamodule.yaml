@@ -1,0 +1,18 @@
+_target_: datamodules.compose_datamodule.ComposeDataModule
+
+wm_dataset_cfg:
+  data_dir: ${paths.data_dir}/mirflickr/
+  img_shape: ${img_shape}
+  secret_len: ${msg_len}
+
+dt_dataset_cfg:
+  data_dir: ${paths.data_dir}/ImageTranslationPair/
+  img_shape: ${img_shape}
+  train_valid_test_nums: [1000, 100, 100]
+  target2diff: False
+
+dataloader_cfg:
+  batch_size: 32
+  num_workers: 4
+  pin_memory: False
+  # drop_last: True

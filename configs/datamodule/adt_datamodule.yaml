@@ -1,0 +1,46 @@
+_target_: datamodules.adt_datamodule.BlackBoxDataModule
+train_data:
+  _target_: datamodules.adt_datamodule.BlackBoxTrainData
+  host_dir: ${paths.data_dir}/mirflickr
+  # source_dirs: []
+  # target_dirs: []
+  source_dirs: ['${paths.data_dir}/ImageTranslationPair/Jpeg/v1/source',
+                '${paths.data_dir}/ImageTranslationPair/Webp/v2/source',
+                '${paths.data_dir}/ImageTranslationPair/Jpeg2000/v1/source',
+                '${paths.data_dir}/ImageTranslationPair/Crayon/v1/source',
+                '${paths.data_dir}/ImageTranslationPair/Starlight/v1/source',
+                '${paths.data_dir}/ImageTranslationPair/Colorpencil/v1/source',
+                '${paths.data_dir}/ImageTranslationPair/Oilpainting/v1/source',
+                '${paths.data_dir}/ImageTranslationPair/Wechat/v1/source',
+                '${paths.data_dir}/ImageTranslationPair/QQ/v1/source']
+  target_dirs: ['${paths.data_dir}/ImageTranslationPair/Jpeg/v1/qf=50',
+                '${paths.data_dir}/ImageTranslationPair/Webp/v2/qf=50',
+                '${paths.data_dir}/ImageTranslationPair/Jpeg2000/v1/cr=20',
+                '${paths.data_dir}/ImageTranslationPair/Crayon/v1/target',
+                '${paths.data_dir}/ImageTranslationPair/Starlight/v1/target',
+                '${paths.data_dir}/ImageTranslationPair/Colorpencil/v1/target',
+                '${paths.data_dir}/ImageTranslationPair/Oilpainting/v1/target',
+                '${paths.data_dir}/ImageTranslationPair/Wechat/v1/target',
+                '${paths.data_dir}/ImageTranslationPair/QQ/v1/target']
+  image_shape: ${img_shape}
+  secret_len: ${msg_len}
+  limited_num: 1000
+
+valid_data:
+  _target_: datamodules.adt_datamodule.BlackBoxTestData
+  source_dir: ${paths.data_dir}/ImageNet_CoCo/Colorpencil/source
+  target_dir: ${paths.data_dir}/ImageNet_CoCo/Colorpencil/target
+  image_shape: ${img_shape}
+  secret_len: ${msg_len}
+
+test_data:
+  _target_: datamodules.adt_datamodule.BlackBoxTestData
+  source_dir: ${paths.data_dir}/ImageNet_CoCo/Colorpencil/source
+  target_dir: ${paths.data_dir}/ImageNet_CoCo/Colorpencil/target
+  image_shape: ${img_shape}
+  secret_len: ${msg_len}
+
+dataloader_cfg:
+  batch_size: 64
+  num_workers: 4
+  pin_memory: true
